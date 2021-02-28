@@ -1,5 +1,6 @@
-package com.namu.namulibrary.model
+package com.namu.namulibrary.model.yaml
 
+import com.namu.namulibrary.model.PluginDataSource
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import java.io.File
 

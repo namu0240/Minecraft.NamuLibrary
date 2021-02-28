@@ -1,4 +1,4 @@
-package com.namu.namulibrary.model
+package com.namu.namulibrary.model.yaml
 
 import com.namu.namulibrary.extension.getYmlFileList
 import org.bukkit.configuration.file.YamlConfiguration

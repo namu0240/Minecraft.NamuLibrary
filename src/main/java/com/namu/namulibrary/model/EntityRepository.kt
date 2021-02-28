@@ -1,5 +1,6 @@
 package com.namu.namulibrary.model
 
+import com.namu.namulibrary.model.yaml.YamlDataSource
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import java.io.File
 
@@ -12,7 +13,7 @@ abstract class EntityRepository<T : ConfigurationSerializable> : DataRepository<
 
     override fun createDefaultData(key: String): T = dataSource.add(key, getDefaultData(key))
     override fun get(key: String): T? = dataSource.get(key)
-    override fun getNotNull(key: String): T = dataSource.get(key) ?: createDefaultData(key)
+    override fun getSafety(key: String): T = dataSource.get(key) ?: createDefaultData(key)
     override fun getList(): List<T> = dataSource.getList()
     override fun create(key: String, data: T): T = dataSource.add(key, data)
     override fun remove(key: String): Unit = dataSource.remove(key)
