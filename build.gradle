@@ -35,8 +35,8 @@ configurations {
 }
 
 dependencies {
-    shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
+//    shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT"
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -50,9 +50,13 @@ jar {
     }
 }
 
-task copyJar(type: Copy) {
+task copyJarIntoBukkit(type: Copy) {
     from jar
     into '/Users/namu/MinecraftProjects/1.16.4/plugins'
+}
+task copyJarIntoPlugin(type: Copy) {
+    from jar
+    into '/Users/namu/IdeaProjects/Minecraft.Shop/libs'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -82,5 +86,16 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.namu'
+            artifactId = 'namulibrary'
+            version = '1.0'
+            from components.java
+        }
     }
 }

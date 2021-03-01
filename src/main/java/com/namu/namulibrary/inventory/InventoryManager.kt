@@ -1,5 +1,6 @@
 package com.namu.namulibrary.inventory
 
+import com.namu.namulibrary.NamuLibrary
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -16,7 +17,7 @@ abstract class GUI(
     private val title: String
 ) : Listener {
 
-    private val inventory by lazy { Bukkit.createInventory(null, size, title) }
+    protected val inventory by lazy { Bukkit.createInventory(null, size, title) }
     private val clickEvents: MutableMap<Int, (InventoryClickEvent) -> Unit> = mutableMapOf()
 
     init {
@@ -24,8 +25,8 @@ abstract class GUI(
     }
 
     abstract fun setContent()
-    abstract fun onInventoryClose()
-    abstract fun onInventoryOpen()
+    abstract fun onInventoryClose(event: InventoryCloseEvent)
+    abstract fun onInventoryOpen(event: InventoryOpenEvent)
 
     @EventHandler
     fun onInventoryOpenEvent(event: InventoryOpenEvent) {
@@ -33,7 +34,7 @@ abstract class GUI(
             return
         }
 
-        onInventoryOpen()
+        onInventoryOpen(event)
     }
 
     @EventHandler
@@ -51,7 +52,7 @@ abstract class GUI(
             return
         }
 
-        onInventoryClose()
+        onInventoryClose(event)
         InventoryCloseEvent.getHandlerList().unregister(this)
         InventoryClickEvent.getHandlerList().unregister(this)
         InventoryOpenEvent.getHandlerList().unregister(this)
@@ -62,7 +63,13 @@ abstract class GUI(
         setContent()
     }
 
-    fun setItem(index: Int, itemStack: ItemStack, onClick: (event: InventoryClickEvent) -> Unit) {
+    fun openLater(player: Player) {
+        Bukkit.getScheduler().runTaskLater(NamuLibrary.getInstance(), Runnable {
+            open(player)
+        }, 1L)
+    }
+
+    fun setItem(index: Int, itemStack: ItemStack, onClick: (event: InventoryClickEvent) -> Unit = {}) {
         inventory.setItem(index, itemStack)
         clickEvents[index] = onClick
     }
