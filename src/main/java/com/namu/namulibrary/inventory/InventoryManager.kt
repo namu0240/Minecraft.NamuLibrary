@@ -64,7 +64,7 @@ abstract class GUI(
     }
 
     fun openLater(player: Player) {
-        Bukkit.getScheduler().runTaskLater(NamuLibrary.getInstance(), Runnable {
+        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
             open(player)
         }, 1L)
     }

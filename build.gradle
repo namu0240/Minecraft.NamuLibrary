@@ -14,18 +14,8 @@ targetCompatibility = '1.8'
 repositories {
     mavenCentral()
     maven {
-        name = 'spigotmc-repo'
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }
-
-    maven {
         name = 'papermc-repo'
         url = 'https://papermc.io/repo/repository/maven-public/'
-    }
-
-    maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
     }
 }
 
@@ -35,7 +25,6 @@ configurations {
 }
 
 dependencies {
-//    shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT"
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
