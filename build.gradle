@@ -25,7 +25,7 @@ configurations {
 }
 
 dependencies {
-    implementation "com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT"
+    compileOnly "com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT"
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -45,7 +45,7 @@ task copyJarIntoBukkit(type: Copy) {
 }
 task copyJarIntoPlugin(type: Copy) {
     from jar
-    into '/Users/namu/IdeaProjects/Minecraft.Shop/libs'
+    into '/Users/namu/IdeaProjects/minecraft-dimgame/libs'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens

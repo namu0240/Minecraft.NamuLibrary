@@ -3,6 +3,7 @@ package com.namu.namulibrary.extension
 import com.namu.namulibrary.nms.addNBTTagCompound
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import org.bukkit.plugin.java.JavaPlugin
 
 // 팩토리 패턴으로 아이템 스택 생성 및 수정하기
 

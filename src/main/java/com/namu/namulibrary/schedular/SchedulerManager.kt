@@ -4,6 +4,14 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
 
+fun SchedulerManager(block: SchedulerManager.() -> Unit): SchedulerManager {
+    return object : SchedulerManager() {
+        init {
+            block.invoke(this)
+        }
+    }
+}
+
 abstract class SchedulerManager {
 
     companion object {
@@ -14,33 +22,60 @@ abstract class SchedulerManager {
         }
     }
 
-    abstract fun started()
-    abstract fun doing()
-    abstract fun finished()
+    var currentCycle = 0
 
-    lateinit var aBukkitTask : BukkitTask
-    lateinit var bBukkitTask : BukkitTask
+    private var started: () -> Unit = {}
+    private var doing: (Int) -> Unit = {}
+    private var finished: () -> Unit = {}
+
+    fun started(block: () -> Unit) {
+        this.started = block
+    }
+
+    fun doing(block: (Int) -> Unit) {
+        this.doing = block
+    }
+
+    fun finished(block: () -> Unit) {
+        this.finished = block
+    }
+
+    lateinit var doingBukkitTask: BukkitTask
+    lateinit var cancelBukkitTask: BukkitTask
 
     fun stopScheduler() {
-        aBukkitTask.cancel()
-        bBukkitTask.cancel()
+        doingBukkitTask.cancel()
+        cancelBukkitTask.cancel()
         finished()
     }
 
+    var period : Long = 0
+    var cycle : Int = 0
+
     fun runSecond(period: Long, cycle: Int) {
+        this.period = period
+        this.cycle = cycle
         started()
-        aBukkitTask = Bukkit.getScheduler().runTaskTimer(plugin, Runnable { doing() }, 0L, period * 20)
-        bBukkitTask = Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-            aBukkitTask.cancel()
+        doingBukkitTask = Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
+            doing(currentCycle)
+            currentCycle++
+        }, 0L, period * 20)
+        cancelBukkitTask = Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+            doingBukkitTask.cancel()
             finished()
         }, period * cycle * 20)
     }
 
     fun runTick(period: Long, cycle: Int) {
+        this.period = period
+        this.cycle = cycle
         started()
-        aBukkitTask = Bukkit.getScheduler().runTaskTimer(plugin, Runnable { doing() }, 0L, period * 20)
-        bBukkitTask = Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-            aBukkitTask.cancel()
+        doingBukkitTask = Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
+            doing(currentCycle)
+            currentCycle++
+        }, 0L, period)
+        cancelBukkitTask = Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+            doingBukkitTask.cancel()
             finished()
         }, period * cycle)
     }
