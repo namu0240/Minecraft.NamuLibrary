@@ -81,9 +81,10 @@ buildscript {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'com.namu'
-            artifactId = 'namulibrary'
-            version = '1.0'
+            groupId = 'com.namu' as Publication
+            artifactId = 'namulibrary' as Publication
+            version = '4.0' as Publication
+
             from components.java
         }
     }
