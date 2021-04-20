@@ -83,7 +83,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.namu'
             artifactId = 'namulibrary'
-            version = '4.0.1'
+            version = '4.0.2'
 
             from components.java
         }

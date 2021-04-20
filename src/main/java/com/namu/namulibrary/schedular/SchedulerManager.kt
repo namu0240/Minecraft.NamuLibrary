@@ -38,6 +38,7 @@ abstract class SchedulerManager {
 
     fun finished(block: () -> Unit) {
         this.finished = block
+        this.currentCycle = 0
     }
 
     lateinit var doingBukkitTask: BukkitTask
