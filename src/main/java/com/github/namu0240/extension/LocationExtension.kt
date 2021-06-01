@@ -7,14 +7,14 @@ fun emptyLocation(): Location {
     return Location(Bukkit.getWorld("world"), 0.0, 0.0, 0.0, 0F, 0F)
 }
 
-fun Location.addX(x: Double) {
-    add(x, 0.0, 0.0)
+fun Location.addX(x: Double): Location {
+    return add(x, 0.0, 0.0)
 }
 
-fun Location.addY(y: Double) {
-    add(0.0, y, 0.0)
+fun Location.addY(y: Double): Location {
+    return add(0.0, y, 0.0)
 }
 
-fun Location.addZ(z: Double) {
-    add(0.0, 0.0, z)
+fun Location.addZ(z: Double): Location {
+    return add(0.0, 0.0, z)
 }

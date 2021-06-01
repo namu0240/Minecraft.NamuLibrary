@@ -46,11 +46,7 @@ jar {
 
 task copyJarIntoBukkit(type: Copy) {
     from jar
-    into '/Users/yudonghun/MinecraftProjects/1.16.4/plugins'
-}
-task copyJarIntoPlugin(type: Copy) {
-    from jar
-    into '/Users/yudonghun/IdeaProjects/minecraft-dimgame/libs'
+    into '/Users/namu/MinecraftProjects/1.16.4/plugins'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
