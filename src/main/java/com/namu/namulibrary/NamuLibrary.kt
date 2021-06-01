@@ -17,4 +17,5 @@ class NamuLibrary : JavaPlugin() {
     }
     override fun onDisable() {
     }
+
 }

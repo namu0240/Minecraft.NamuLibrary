@@ -14,8 +14,12 @@ targetCompatibility = '1.8'
 repositories {
     mavenCentral()
     maven {
-        name = 'papermc-repo'
-        url = 'https://papermc.io/repo/repository/maven-public/'
+        name = 'spigot-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'jitpack'
+        url = 'https://jitpack.io'
     }
 }
 
@@ -25,9 +29,27 @@ configurations {
 }
 
 dependencies {
-    compileOnly "com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT"
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation "org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    implementation 'com.github.noonmaru:kommand:0.6.3'
+    shade 'com.github.noonmaru:kommand:0.6.3'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
+    shade "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3"
+    shade "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3"
+
+    implementation "com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.4.0"
+    shade "com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:1.4.0"
+
+    implementation "com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.4.0"
+    shade "com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.4.0"
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
@@ -41,11 +63,11 @@ jar {
 
 task copyJarIntoBukkit(type: Copy) {
     from jar
-    into '/Users/namu/MinecraftProjects/1.16.4/plugins'
+    into '/Users/yudonghun/MinecraftProjects/1.16.4/plugins'
 }
 task copyJarIntoPlugin(type: Copy) {
     from jar
-    into '/Users/namu/IdeaProjects/minecraft-dimgame/libs'
+    into '/Users/yudonghun/IdeaProjects/minecraft-dimgame/libs'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -68,7 +90,7 @@ compileTestKotlin {
 }
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.30'
     repositories {
         mavenCentral()
         jcenter()
@@ -81,9 +103,9 @@ buildscript {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'com.namu' as Publication
-            artifactId = 'namulibrary' as Publication
-            version = '4.0' as Publication
+            groupId = 'com.namu'
+            artifactId = 'namulibrary'
+            version = '5.0'
 
             from components.java
         }
