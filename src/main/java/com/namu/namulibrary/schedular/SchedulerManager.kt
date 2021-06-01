@@ -4,14 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
 
-fun SchedulerManager(block: SchedulerManager.() -> Unit): SchedulerManager {
-    return object : SchedulerManager() {
-        init {
-            block.invoke(this)
-        }
-    }
-}
-
 abstract class SchedulerManager {
 
     companion object {
