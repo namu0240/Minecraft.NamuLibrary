@@ -1,6 +1,9 @@
 package com.github.namu0240.inventory
 
 import com.github.namu0240.NamuLibrary
+import com.github.shynixn.mccoroutine.registerSuspendingEvents
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -14,22 +17,18 @@ import org.bukkit.plugin.java.JavaPlugin
 abstract class GUI(
     private val plugin: JavaPlugin,
     private val size: Int,
-    private val title: String
+    private val title: String,
 ) : Listener {
 
     protected val inventory by lazy { Bukkit.createInventory(null, size, title) }
     private val clickEvents: MutableMap<Int, (InventoryClickEvent) -> Unit> = mutableMapOf()
 
-    init {
-        Bukkit.getPluginManager().registerEvents(this@GUI, plugin)
-    }
-
-    abstract fun setContent()
-    abstract fun onInventoryClose(event: InventoryCloseEvent)
-    abstract fun onInventoryOpen(event: InventoryOpenEvent)
+    abstract suspend fun setContent()
+    abstract suspend fun onInventoryClose(event: InventoryCloseEvent)
+    abstract suspend fun onInventoryOpen(event: InventoryOpenEvent)
 
     @EventHandler
-    fun onInventoryOpenEvent(event: InventoryOpenEvent) {
+    suspend fun onInventoryOpenEvent(event: InventoryOpenEvent) {
         if (event.inventory != inventory) {
             return
         }
@@ -38,16 +37,18 @@ abstract class GUI(
     }
 
     @EventHandler
-    fun onInventoryClickEvent(event: InventoryClickEvent) {
-        if (event.inventory != inventory) {
-            return
-        }
+    suspend fun onInventoryClickEvent(event: InventoryClickEvent) {
+        coroutineScope {
+            if (event.inventory != inventory) {
+                return@coroutineScope
+            }
 
-        clickEvents[event.rawSlot]?.invoke(event)
+            clickEvents[event.rawSlot]?.invoke(event)
+        }
     }
 
     @EventHandler
-    fun onInventoryCloseEvent(event: InventoryCloseEvent) {
+    suspend fun onInventoryCloseEvent(event: InventoryCloseEvent) {
         if (event.inventory != inventory) {
             return
         }
@@ -58,15 +59,15 @@ abstract class GUI(
         InventoryOpenEvent.getHandlerList().unregister(this)
     }
 
-    fun open(player: Player) {
+    suspend fun open(player: Player) {
+        Bukkit.getPluginManager().registerSuspendingEvents(this@GUI, plugin)
         player.openInventory(inventory)
         setContent()
     }
 
-    fun openLater(player: Player) {
-        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-            open(player)
-        }, 1L)
+    suspend fun openLater(player: Player) {
+        delay(50)
+        open(player)
     }
 
     fun setItem(index: Int, itemStack: ItemStack, onClick: (event: InventoryClickEvent) -> Unit = {}) {
