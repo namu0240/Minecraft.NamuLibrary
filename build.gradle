@@ -29,9 +29,7 @@ configurations {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT"
 
     implementation 'com.github.monun:kommand:0.6.3'
@@ -41,6 +39,7 @@ dependencies {
     implementation "com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.4.0"
     implementation "io.insert-koin:koin-core-ext:3.0.2"
 
+    shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     shade 'com.github.monun:kommand:0.6.3'
     shade "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
     shade "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.3"
@@ -48,6 +47,8 @@ dependencies {
     shade "com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:1.4.0"
     shade "io.insert-koin:koin-core-ext:3.0.2"
 
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 jar {
@@ -61,6 +62,10 @@ jar {
 task copyJarIntoBukkit(type: Copy) {
     from jar
     into '/Users/namu/MinecraftProjects/1.16.4/plugins'
+}
+task copyJarIntoPlugin(type: Copy) {
+    from jar
+    into '/Users/namu/IdeaProjects/minecraft-dimgame/libs'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -97,8 +102,8 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'com.github.namu0240'
-            artifactId = 'namulibrary'
-            version = '5.0.7'
+            artifactId = 'minecraft-namulibrary'
+            version = '5.1.5'
 
             from components.java
         }
