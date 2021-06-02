@@ -47,7 +47,7 @@ jar {
 
 task copyJarIntoBukkit(type: Copy) {
     from jar
-    into '/Users/namu/MinecraftProjects/1.16.4/plugins'
+    into '/Users/yudonghun/MinecraftProjects/1.16.4/plugins'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -85,7 +85,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.github.namu0240'
             artifactId = 'namulibrary'
-            version = '5.0.5'
+            version = '5.0.6'
 
             from components.java
         }
