@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.4.32"
     `maven-publish`
 }
 
@@ -20,14 +20,11 @@ dependencies {
 
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions.jvmTarget = "1.8"
     }
     create<Jar>("sourcesJar") {
         from(sourceSets["main"].allSource)
         archiveClassifier.set("sources")
-    }
-    test {
-        useJUnitPlatform()
     }
 }
 
