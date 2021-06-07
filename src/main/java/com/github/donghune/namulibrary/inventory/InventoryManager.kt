@@ -1,5 +1,7 @@
 package com.github.donghune.namulibrary.inventory
 
+import com.github.shynixn.mccoroutine.launch
+import com.github.shynixn.mccoroutine.minecraftDispatcher
 import com.github.shynixn.mccoroutine.registerSuspendingEvents
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -65,21 +67,27 @@ abstract class GUI(
     }
 
     suspend fun refreshContent() {
-        inventory.clear()
-        InventoryClickEvent.getHandlerList().unregister(this)
-        Bukkit.getPluginManager().registerSuspendingEvents(this@GUI, plugin)
-        setContent()
+        plugin.launch(plugin.minecraftDispatcher) {
+            inventory.clear()
+            InventoryClickEvent.getHandlerList().unregister(this@GUI)
+            Bukkit.getPluginManager().registerSuspendingEvents(this@GUI, plugin)
+            setContent()
+        }
     }
 
     suspend fun open(player: Player) {
-        Bukkit.getPluginManager().registerSuspendingEvents(this@GUI, plugin)
-        player.openInventory(inventory)
-        setContent()
+        plugin.launch(plugin.minecraftDispatcher) {
+            Bukkit.getPluginManager().registerSuspendingEvents(this@GUI, plugin)
+            player.openInventory(inventory)
+            setContent()
+        }
     }
 
-    suspend fun openLater(player: Player) {
-        delay(50)
-        open(player)
+    fun openLater(player: Player) {
+        plugin.launch(plugin.minecraftDispatcher) {
+            delay(50)
+            open(player)
+        }
     }
 
     fun setItem(index: Int, itemStack: ItemStack, onClick: (event: InventoryClickEvent) -> Unit = {}) {
