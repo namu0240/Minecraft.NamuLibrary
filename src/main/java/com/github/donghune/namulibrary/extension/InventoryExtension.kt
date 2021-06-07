@@ -19,7 +19,6 @@ fun Inventory.hasItems(items : Array<ItemStack>) : Boolean {
 }
 
 fun Inventory.takeItems(items: Array<ItemStack>): Boolean {
-    val cloneInventoryContents = storageContents.clone()
 
     val returnedItemList: HashMap<Int, ItemStack> = removeItem(*items) // 추가 되지 못한 아이템 목록
 
@@ -27,13 +26,10 @@ fun Inventory.takeItems(items: Array<ItemStack>): Boolean {
         return true
     }
 
-    storageContents = cloneInventoryContents
     return false
 }
 
 fun Inventory.giveItems(items: Array<ItemStack>): Boolean {
-
-    val cloneInventoryContents = storageContents.clone()
 
     val returnedItemList: HashMap<Int, ItemStack> = addItem(*items) // 추가 되지 못한 아이템 목록
 
@@ -41,6 +37,5 @@ fun Inventory.giveItems(items: Array<ItemStack>): Boolean {
         return true
     }
 
-    storageContents = cloneInventoryContents
     return false
 }

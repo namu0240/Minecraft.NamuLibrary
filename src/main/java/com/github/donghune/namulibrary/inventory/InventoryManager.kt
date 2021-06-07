@@ -25,6 +25,7 @@ abstract class GUI(
     abstract suspend fun setContent()
     abstract suspend fun onInventoryClose(event: InventoryCloseEvent)
     abstract suspend fun onInventoryOpen(event: InventoryOpenEvent)
+    abstract suspend fun onPlayerInventoryClick(event: InventoryClickEvent)
 
     @EventHandler
     suspend fun onInventoryOpenEvent(event: InventoryOpenEvent) {
@@ -38,7 +39,12 @@ abstract class GUI(
     @EventHandler
     suspend fun onInventoryClickEvent(event: InventoryClickEvent) {
         coroutineScope {
-            if (event.inventory != inventory) {
+            if (event.clickedInventory == event.whoClicked.inventory) {
+                onPlayerInventoryClick(event)
+                return@coroutineScope
+            }
+
+            if (event.clickedInventory != inventory) {
                 return@coroutineScope
             }
 
@@ -56,6 +62,13 @@ abstract class GUI(
         InventoryCloseEvent.getHandlerList().unregister(this)
         InventoryClickEvent.getHandlerList().unregister(this)
         InventoryOpenEvent.getHandlerList().unregister(this)
+    }
+
+    suspend fun refreshContent() {
+        inventory.clear()
+        InventoryClickEvent.getHandlerList().unregister(this)
+        Bukkit.getPluginManager().registerSuspendingEvents(this@GUI, plugin)
+        setContent()
     }
 
     suspend fun open(player: Player) {
