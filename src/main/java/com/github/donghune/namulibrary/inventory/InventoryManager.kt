@@ -66,7 +66,7 @@ abstract class GUI(
         InventoryOpenEvent.getHandlerList().unregister(this)
     }
 
-    suspend fun refreshContent() {
+    fun refreshContent() {
         plugin.launch(plugin.minecraftDispatcher) {
             inventory.clear()
             InventoryClickEvent.getHandlerList().unregister(this@GUI)
@@ -75,7 +75,7 @@ abstract class GUI(
         }
     }
 
-    suspend fun open(player: Player) {
+    fun open(player: Player) {
         plugin.launch(plugin.minecraftDispatcher) {
             Bukkit.getPluginManager().registerSuspendingEvents(this@GUI, plugin)
             player.openInventory(inventory)
