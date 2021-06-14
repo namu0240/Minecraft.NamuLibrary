@@ -1,21 +1,34 @@
 package com.github.donghune.namulibrary.extension
-
+import org.bukkit.Material
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
-import java.util.HashMap
+import java.util.*
 
-fun Inventory.hasItems(items : Array<ItemStack>) : Boolean {
-    val cloneInventoryContents = storageContents.clone()
+fun Inventory.isContentFull(): Boolean {
+    return contents.count { itemStack -> itemStack != null && itemStack.type == Material.AIR } == size
+}
 
-    val returnedItemList: HashMap<Int, ItemStack> = removeItem(*items) // 추가 되지 못한 아이템 목록
+fun Inventory.isContentEmpty(): Boolean {
+    return !isContentFull()
+}
 
-    if (returnedItemList.isEmpty()) {
-        storageContents = cloneInventoryContents
-        return true
-    }
+fun Inventory.hasItems(requireItems: Array<ItemStack>): Boolean {
+    val requireMap = requireItems
+            .filter { itemStack: ItemStack -> itemStack != null && itemStack.type != Material.AIR }
+            .groupBy { itemStack: ItemStack -> itemStack.itemMeta?.displayName ?: itemStack.type }
+            .mapValues { data -> data.value.sumBy { itemStack: ItemStack -> itemStack.amount } }
+            .toMap()
 
-    storageContents = cloneInventoryContents
-    return false
+    val playerMap = storageContents
+            .filter { itemStack: ItemStack -> itemStack != null && itemStack.type != Material.AIR }
+            .groupBy { itemStack: ItemStack -> itemStack.itemMeta?.displayName ?: itemStack.type }
+            .mapValues { data -> data.value.sumBy { itemStack: ItemStack -> itemStack.amount } }
+            .toMap()
+
+    return requireMap
+            .map { entry: Map.Entry<Any, Int> -> entry.value <= (playerMap[entry.key] ?: 0) }
+            .find { isHas: Boolean -> !isHas }
+            .let { isFind: Boolean? -> isFind == null }
 }
 
 fun Inventory.takeItems(items: Array<ItemStack>): Boolean {

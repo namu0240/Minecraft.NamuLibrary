@@ -5,6 +5,10 @@ import org.bukkit.inventory.ItemStack
 import java.io.File
 
 
+fun List<ItemStack>.toCloneTypeArray(): Array<ItemStack> {
+    return map { it.clone() }.toTypedArray()
+}
+
 fun List<String>.toMap(separator: String): MutableMap<String, Int> {
     val resultMap = mutableMapOf<String, Int>()
     forEach { item ->
